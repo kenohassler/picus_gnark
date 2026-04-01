@@ -74,7 +74,7 @@ func CompilePicus(name string, circuit frontend.Circuit, field *big.Int) {
 		fmt.Fprintf(fInfo, "(extra-constraint %v)\n", x)
 	}
 
-	nR1CS, ok := r1cs.(constraint.R1CS[constraint.U64])
+	nR1CS, ok := r1cs.(constraint.R1CS)
 	if ok {
 		constraints := nR1CS.GetR1Cs()
 		for _, r1c := range constraints {
