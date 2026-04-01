@@ -1,4 +1,4 @@
-module github.com/Veridise/picus_gnark
+module github.com/kenohassler/picus_gnark
 
 go 1.24.0
 
