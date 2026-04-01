@@ -46,7 +46,11 @@ func CompilePicus(name string, circuit frontend.Circuit, field *big.Int) {
 	fInfo, _ := os.Create(name + ".sr1cs")
 	defer fInfo.Close()
 
-	r1cs, _ := frontend.Compile(field, r1cs.NewBuilder, circuit)
+	r1cs, err := frontend.Compile(field, r1cs.NewBuilder, circuit)
+	// need to check for errors before accessing r1cs (otherwise segfaults)
+	if err != nil {
+		os.Exit(1)
+	}
 	fmt.Fprintf(fInfo, "(prime-number %v)\n", r1cs.Field())
 
 	for _, x := range varIns {
