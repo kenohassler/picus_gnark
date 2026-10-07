@@ -3,7 +3,7 @@ module github.com/kenohassler/picus_gnark
 go 1.24.0
 
 require (
-	github.com/consensys/gnark v0.14.0
+	github.com/consensys/gnark v0.13.0
 	github.com/rs/zerolog v1.34.0
 )
 
