@@ -10,7 +10,6 @@ import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/logger"
-	"github.com/rs/zerolog"
 )
 
 var extraCnsts []string
@@ -45,8 +44,6 @@ func CompilePicus(name string, circuit frontend.Circuit, field *big.Int) {
 	varOuts = []string{}
 	labels = [][2]string{}
 
-	// redirect logs to stderr, use UNIX timestamps and machine-readable JSON
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	logger.SetOutput(os.Stderr)
 	// use stdout for output, ignoring the given name
 	fInfo := os.Stdout
@@ -76,21 +73,21 @@ func CompilePicus(name string, circuit frontend.Circuit, field *big.Int) {
 
 	nR1CS, ok := r1cs.(constraint.R1CS)
 	if ok {
-		constraints := nR1CS.GetR1Cs()
+		constraints, resolver := nR1CS.GetConstraints()
 		for _, r1c := range constraints {
 			fmt.Fprintf(fInfo, "(constraint ")
 			fmt.Fprintf(fInfo, "[")
 
 			for i := 0; i < len(r1c.L); i++ {
-				fmt.Fprintf(fInfo, "(%v %v) ", r1cs.CoeffToString(int(r1c.L[i].CID)), r1c.L[i].VID)
+				fmt.Fprintf(fInfo, "(%v %v) ", resolver.CoeffToString(int(r1c.L[i].CID)), r1c.L[i].VID)
 			}
 			fmt.Fprintf(fInfo, "] [")
 			for i := 0; i < len(r1c.R); i++ {
-				fmt.Fprintf(fInfo, "(%v %v) ", r1cs.CoeffToString(int(r1c.R[i].CID)), r1c.R[i].VID)
+				fmt.Fprintf(fInfo, "(%v %v) ", resolver.CoeffToString(int(r1c.R[i].CID)), r1c.R[i].VID)
 			}
 			fmt.Fprintf(fInfo, "] [")
 			for i := 0; i < len(r1c.O); i++ {
-				fmt.Fprintf(fInfo, "(%v %v) ", r1cs.CoeffToString(int(r1c.O[i].CID)), r1c.O[i].VID)
+				fmt.Fprintf(fInfo, "(%v %v) ", resolver.CoeffToString(int(r1c.O[i].CID)), r1c.O[i].VID)
 			}
 			fmt.Fprintf(fInfo, "])\n")
 		}
