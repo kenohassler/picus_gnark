@@ -10,7 +10,6 @@ import (
 	"github.com/consensys/gnark/frontend"
 	"github.com/consensys/gnark/frontend/cs/r1cs"
 	"github.com/consensys/gnark/logger"
-	"github.com/rs/zerolog"
 )
 
 var extraCnsts []string
@@ -45,8 +44,6 @@ func CompilePicus(name string, circuit frontend.Circuit, field *big.Int) {
 	varOuts = []string{}
 	labels = [][2]string{}
 
-	// redirect logs to stderr, use UNIX timestamps and machine-readable JSON
-	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 	logger.SetOutput(os.Stderr)
 	// use stdout for output, ignoring the given name
 	fInfo := os.Stdout
